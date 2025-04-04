@@ -14,6 +14,8 @@
             --text-color: #ffffff;
             --text-secondary-color: #ddd;
             --link-bg-color: #1a1a1a;
+            --scroll-bg: #333;
+            --scroll-neon: linear-gradient(90deg, blue, purple, red, indigo);
         }
 
         [data-theme="light"] {
@@ -23,6 +25,8 @@
             --text-color: #333333;
             --text-secondary-color: #555;
             --link-bg-color: #e0e0e0;
+            --scroll-bg: #ddd;
+            --scroll-neon: linear-gradient(90deg, blue, purple, red, indigo);
         }
 
         body {
@@ -32,8 +36,9 @@
             margin: 0;
             padding: 20px;
             direction: rtl;
-            overflow: hidden;
             transition: background-color 0.3s ease;
+            height: 100vh;
+            overflow-y: auto;
         }
 
         .container {
@@ -186,6 +191,101 @@
             display: block;
         }
 
+        /* شريط التمرير النيون */
+        .scroll-container {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 150px;
+            width: 8px;
+            background-color: var(--scroll-bg);
+            border-radius: 10px;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .scroll-track {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .scroll-track::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--scroll-neon);
+            opacity: 0.4;
+        }
+
+        .scroll-up, .scroll-down {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .scroll-up {
+            top: 0;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+        }
+
+        .scroll-down {
+            bottom: 0;
+            border-bottom-right-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .scroll-arrow {
+            display: block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+        }
+
+        .scroll-up .scroll-arrow {
+            border-bottom: 5px solid var(--text-color);
+            margin-bottom: 3px;
+        }
+
+        .scroll-down .scroll-arrow {
+            border-top: 5px solid var(--text-color);
+            margin-top: 3px;
+        }
+
+        .scroll-up:hover, .scroll-down:hover {
+            background: var(--scroll-neon);
+            animation: neonGlow 1.5s ease-in-out infinite alternate;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--scroll-neon);
+            border-radius: 10px;
+            box-shadow: 0 0 15px var(--scroll-neon), 0 0 5px var(--scroll-neon);
+            animation: neonGlow 1.5s ease-in-out infinite alternate;
+            z-index: 1001;
+            transition: top 0.2s ease;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -219,6 +319,14 @@
             80% { box-shadow: 0px 0px 15px red; border-color: red; }
             100% { box-shadow: 0px 0px 15px indigo; border-color: indigo; }
         }
+
+        @keyframes neonGlow {
+            0% { box-shadow: 0 0 5px rgba(0, 0, 255, 0.8), 0 0 10px rgba(0, 0, 255, 0.5); }
+            25% { box-shadow: 0 0 5px rgba(128, 0, 128, 0.8), 0 0 10px rgba(128, 0, 128, 0.5); }
+            50% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.8), 0 0 10px rgba(255, 0, 0, 0.5); }
+            75% { box-shadow: 0 0 5px rgba(75, 0, 130, 0.8), 0 0 10px rgba(75, 0, 130, 0.5); }
+            100% { box-shadow: 0 0 5px rgba(0, 0, 255, 0.8), 0 0 10px rgba(0, 0, 255, 0.5); }
+        }
     </style>
 </head>
 <body>
@@ -233,12 +341,24 @@
         <img src="elcom.png" alt="Elcomengineering" class="profile-img">
         <h1>Elcomengineering</h1>
         <p>🌍 هدفنا تقديم محتوى غني في جميع تخصصات الهندسة! 🛠️📐</p>
-     <a href="https://www.instagram.com/elcomengineering?igsh=MW81ZmR4d2VrcGRhNw%3D%3D&utm_source=qr" class="link" target="_blank">Instagram</a>
+        <a href="https://www.instagram.com/elcomengineering?igsh=MW81ZmR4d2VrcGRhNw%3D%3D&utm_source=qr" class="link" target="_blank">Instagram</a>
         <a href="https://elcomengineering.netlify.app" class="link" target="_blank">موقع جميع العلوم</a>
         <a href="https://t.me/Elcomaibot" class="link">Elcom Ai 🤖</a>
         <a href="https://www.facebook.com/share/18rorgB6Vk/?mibextid=wwXIfr" class="link">Facebook</a>
         <a href="https://www.threads.net/@elcomengineering?igshid=NTc4MTIwNjQ2YQ==" class="link">Threads</a>
         <a href="#" class="link">TikTok</a>
+    </div>
+
+    <!-- شريط التمرير النيون -->
+    <div class="scroll-container">
+        <div class="scroll-track"></div>
+        <div class="scroll-up">
+            <span class="scroll-arrow"></span>
+        </div>
+        <div class="scroll-indicator"></div>
+        <div class="scroll-down">
+            <span class="scroll-arrow"></span>
+        </div>
     </div>
 
     <script>
@@ -257,6 +377,46 @@
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
         });
+
+        // وظائف شريط التمرير النيون
+        const scrollUpBtn = document.querySelector('.scroll-up');
+        const scrollDownBtn = document.querySelector('.scroll-down');
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        const scrollTrack = document.querySelector('.scroll-track');
+        const trackHeight = document.querySelector('.scroll-container').offsetHeight - 80; // طول المسار مع مراعاة الأزرار
+
+        // تحديث موضع مؤشر التمرير
+        function updateScrollIndicator() {
+            const scrollPosition = window.scrollY;
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercentage = scrollPosition / maxScroll;
+            
+            // حساب موضع المؤشر بناءً على نسبة التمرير
+            const indicatorPosition = 40 + (scrollPercentage * trackHeight);
+            scrollIndicator.style.top = `${indicatorPosition}px`;
+        }
+
+        // وظيفة التمرير للأعلى
+        scrollUpBtn.addEventListener('click', () => {
+            window.scrollBy({
+                top: -window.innerHeight / 2,
+                behavior: 'smooth'
+            });
+        });
+
+        // وظيفة التمرير للأسفل
+        scrollDownBtn.addEventListener('click', () => {
+            window.scrollBy({
+                top: window.innerHeight / 2,
+                behavior: 'smooth'
+            });
+        });
+
+        // تحديث موضع المؤشر عند التمرير
+        window.addEventListener('scroll', updateScrollIndicator);
+        
+        // تحديث الموضع الأولي للمؤشر
+        document.addEventListener('DOMContentLoaded', updateScrollIndicator);
     </script>
 </body>
 </html>
