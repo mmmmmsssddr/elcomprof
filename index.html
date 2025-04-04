@@ -158,6 +158,7 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 8px rgba(79, 70, 229, 0.6);
+            transform: translateX(0);
         }
         
         [data-theme="light"] .toggle-circle {
@@ -367,6 +368,10 @@
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
             document.documentElement.setAttribute('data-theme', savedTheme);
+        } else {
+            // إذا لم يكن هناك وضع محفوظ، استخدم الوضع الداكن افتراضيًا
+            // لا نحتاج لتعيين data-theme للوضع الداكن لأنه الوضع الافتراضي في CSS
+            localStorage.setItem('theme', 'dark');
         }
         
         // إضافة وظيفة التبديل للزر
@@ -375,7 +380,11 @@
             const currentTheme = document.documentElement.getAttribute('data-theme');
             const newTheme = currentTheme === 'light' ? 'dark' : 'light';
             
-            document.documentElement.setAttribute('data-theme', newTheme);
+            if (newTheme === 'dark') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                document.documentElement.setAttribute('data-theme', newTheme);
+            }
             localStorage.setItem('theme', newTheme);
         });
 
